@@ -6626,9 +6626,9 @@ InitErgmTerm.triangle<-InitErgmTerm.triangles<-function (nw, arglist, ..., versi
                                                                                                          
 ################################################################################
 # Test
-#' @name triangle-ergmTerm
-#' @title Triangles
-#' @description Triangles
+#' @name triangle1-ergmTerm
+#' @title Triangles1
+#' @description Triangles1
 #' @details By default, this term adds one statistic to the model equal to the number of triangles
 #'   in the network. For an undirected network, a triangle is defined to be any
 #'   set \eqn{\{(i,j), (j,k), (k,i)\}} of three edges. For a directed network, a
@@ -6640,7 +6640,7 @@ InitErgmTerm.triangle<-InitErgmTerm.triangles<-function (nw, arglist, ..., versi
 #'   --- thus at most two of these three terms can be in a model. 
 #'
 #' @usage
-#' # binary: triangle(attr=NULL, diff=FALSE, levels=NULL)
+#' # binary: triangle1(attr=NULL, diff=FALSE, levels=NULL)
 #'
 #' @param attr,diff quantitative attribute (see Specifying Vertex attributes and Levels (`?nodal_attributes`) for details.) If `attr` is specified and `diff` is `FALSE` ,
 #'   then the count is restricted to those triples of nodes with
@@ -6684,10 +6684,10 @@ InitErgmTerm.triangle1<-InitErgmTerm.triangles1<-function (nw, arglist, ..., ver
     nodecov <- match(nodecov,u,nomatch=length(u)+1)
     ui <- seq(along=u)
     if (!diff) {
-      coef.names <- paste("triangle",attrname,sep=".")
+      coef.names <- paste("triangle1",attrname,sep=".")
       inputs <- c(nodecov)
     } else {
-      coef.names <- paste("triangle",attrname, u, sep=".")
+      coef.names <- paste("triangle1",attrname, u, sep=".")
       inputs <- c(ui, nodecov)
       attr(inputs, "ParamsBeforeCov") <- length(ui)
     }
