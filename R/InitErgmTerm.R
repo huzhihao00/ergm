@@ -6622,6 +6622,83 @@ InitErgmTerm.triangle<-InitErgmTerm.triangles<-function (nw, arglist, ..., versi
   list(name="triangle", coef.names=coef.names, inputs=inputs, minval=0)
 }
 
+                                                                                                         
+                                                                                                         
+################################################################################
+# Test
+#' @name triangle-ergmTerm
+#' @title Triangles
+#' @description Triangles
+#' @details By default, this term adds one statistic to the model equal to the number of triangles
+#'   in the network. For an undirected network, a triangle is defined to be any
+#'   set \eqn{\{(i,j), (j,k), (k,i)\}} of three edges. For a directed network, a
+#'   triangle is defined as any set of three edges \eqn{(i{\rightarrow}j)}{(i,j)}
+#'   and \eqn{(j{\rightarrow}k)}{(j,k)} and either \eqn{(k{\rightarrow}i)}{(k,i)}
+#'   or \eqn{(k{\leftarrow}i)}{(i,k)} . The former case is called a "transitive
+#'   triple" and the latter is called a "cyclic triple", so in the case of a
+#'   directed network, `triangle` equals `ttriple` plus `ctriple`
+#'   --- thus at most two of these three terms can be in a model. 
+#'
+#' @usage
+#' # binary: triangle(attr=NULL, diff=FALSE, levels=NULL)
+#'
+#' @param attr,diff quantitative attribute (see Specifying Vertex attributes and Levels (`?nodal_attributes`) for details.) If `attr` is specified and `diff` is `FALSE` ,
+#'   then the count is restricted to those triples of nodes with
+#'   equal values of the vertex attribute specified by `attr` . If `attr` is specified and `diff` is `TRUE` ,
+#'   then one statistic is added for each value of `attr` ,
+#'   equal to the number of triangles where all three nodes have that value of the attribute.
+#' @templateVar explain add one statistic for each value specified if `diff` is `TRUE`.
+#' @template ergmTerm-levels-doco
+#'
+#' @template ergmTerm-general
+#'
+#' @concept frequently-used
+#' @concept triad-related
+#' @concept directed
+#' @concept undirected
+#' @concept categorical nodal attribute
+InitErgmTerm.triangle1<-InitErgmTerm.triangles1<-function (nw, arglist, ..., version=packageVersion("ergm")) {
+  if(version <= as.package_version("3.9.4")){
+    a <- check.ErgmTerm(nw, arglist,
+                        varnames = c("attrname", "diff", "levels"),
+                        vartypes = c("character", "logical", "character,numeric,logical"),
+                        defaultvalues = list(NULL, FALSE, NULL),
+                        required = c(FALSE, FALSE, FALSE))
+    attrarg <- a$attrname
+    levels <- if(!is.null(a$levels)) I(a$levels) else NULL    
+  }else{
+    a <- check.ErgmTerm(nw, arglist,
+                        varnames = c("attr", "diff", "levels"),
+                        vartypes = c(ERGM_VATTR_SPEC, "logical", ERGM_LEVELS_SPEC),
+                        defaultvalues = list(NULL, FALSE, NULL),
+                        required = c(FALSE, FALSE, FALSE))
+    attrarg <- a$attr
+    levels <- a$levels      
+  }
+
+  diff <- a$diff
+  if(!is.null(attrarg)) {
+    nodecov <- ergm_get_vattr(attrarg, nw)
+    attrname <- attr(nodecov, "name")
+    u <- ergm_attr_levels(levels, nodecov, nw, levels = sort(unique(nodecov)))
+    nodecov <- match(nodecov,u,nomatch=length(u)+1)
+    ui <- seq(along=u)
+    if (!diff) {
+      coef.names <- paste("triangle",attrname,sep=".")
+      inputs <- c(nodecov)
+    } else {
+      coef.names <- paste("triangle",attrname, u, sep=".")
+      inputs <- c(ui, nodecov)
+      attr(inputs, "ParamsBeforeCov") <- length(ui)
+    }
+  }else{
+    coef.names <- "triangle1"
+    inputs <- NULL
+  }
+  list(name="triangle1", coef.names=coef.names, inputs=inputs, minval=0)
+}
+
+                                                                                                         
 
 
 ################################################################################
