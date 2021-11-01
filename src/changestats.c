@@ -3783,6 +3783,22 @@ C_CHANGESTAT_FN(c_nodecov) {
 }
 
 /*****************
+ changestat: d_clique
+*****************/
+C_CHANGESTAT_FN(c_clique) { 
+  unsigned int oshift = N_INPUT_PARAMS / N_CHANGE_STATS;
+
+  /* *** don't forget tail -> head */    
+      for(unsigned int j=0, o=0; j<N_CHANGE_STATS; j++, o+=oshift){
+	CHANGE_STAT[j] = 0
+	if (INPUT_ATTRIB[tail+o-1] == INPUT_ATTRIB[head+o-1]) {
+	  CHANGE_STAT[j] = 1
+	}
+    }
+}
+
+
+/*****************
  changestat: d_nodefactor
 *****************/
 C_CHANGESTAT_FN(c_nodefactor) { 
