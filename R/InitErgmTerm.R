@@ -4947,6 +4947,61 @@ InitErgmTerm.nodecov<-function (nw, arglist, ..., version=packageVersion("ergm")
 #' # binary: nodemain
 InitErgmTerm.nodemain<-InitErgmTerm.nodecov
 
+                        
+################################################################################
+
+#' @name cliquecov-ergmTerm
+#' @title Main effect of a covariate
+#' @description Main effect of a covariate
+#' @details This term adds a single network statistic for each quantitative attribute or matrix column to the model equaling the sum of
+#'   `attr(i)` and `attr(j)` for all edges \eqn{(i,j)} in the
+#'   network. For categorical attributes, see `nodefactor` . Note that for
+#'   directed networks, `nodecov` equals `nodeicov` plus
+#'   `nodeocov` .
+#'
+#' @usage
+#' # binary: nodecov(attr)
+#'
+#' @template ergmTerm-attr
+#'
+#' @template ergmTerm-general
+#'
+#' @template ergmTerm-args-3.9.4
+#'
+#' @concept dyad-independent
+#' @concept frequently-used
+#' @concept directed
+#' @concept undirected
+#' @concept quantitative nodal attribute
+InitErgmTerm.clique<-function (nw, arglist, ..., version=packageVersion("ergm")) {
+  if(version <= as.package_version("3.9.4")){
+    a <- check.ErgmTerm(nw, arglist,
+                        varnames = c("attrname","transform","transformname"),
+                        vartypes = c("character","function","character"),
+                        defaultvalues = list(NULL,function(x)x,""),
+                        required = c(TRUE,FALSE,FALSE))
+    attrname<-a$attrname
+    f<-a$transform
+    f.name<-a$transformname
+    coef.names <- "cliquecov"
+    cliquecov1 <- f(get.node.attr(nw, "a1", "cliquecov"))
+    cliquecov2 <- f(get.node.attr(nw, "a2", "cliquecov"))
+  }else{
+    ### Check the network and arguments to make sure they are appropriate.
+    a <- check.ErgmTerm(nw, arglist, directed=NULL, bipartite=NULL,
+                        varnames = c("attr"),
+                        vartypes = c(ERGM_VATTR_SPEC),
+                        defaultvalues = list(NULL),
+                        required = c(TRUE))
+    ### Process the arguments
+    cliquecov1 <- ergm_get_vattr(a$a1, nw, multiple="matrix")
+    cliquecov2 <- ergm_get_vattr(a$a2, nw, multiple="matrix")
+    coef.names <- "cliquecov"
+  }
+  list(name="clique", coef.names=coef.names, inputs=c(cliquecov1, cliquecov2), dependence=FALSE)
+}
+                        
+
 ################################################################################
 
 #' @name nodefactor-ergmTerm
