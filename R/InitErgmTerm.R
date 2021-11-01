@@ -4989,7 +4989,7 @@ InitErgmTerm.clique<-function (nw, arglist, ..., version=packageVersion("ergm"))
   }else{
     ### Check the network and arguments to make sure they are appropriate.
     a <- check.ErgmTerm(nw, arglist, directed=NULL, bipartite=NULL,
-                        varnames = c("clique"),
+                        varnames = c("attr"),
                         vartypes = c(ERGM_VATTR_SPEC),
                         defaultvalues = list(NULL),
                         required = c(TRUE))
