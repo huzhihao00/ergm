@@ -4976,29 +4976,41 @@ InitErgmTerm.nodemain<-InitErgmTerm.nodecov
 InitErgmTerm.clique<-function (nw, arglist, ..., version=packageVersion("ergm")) {
   if(version <= as.package_version("3.9.4")){
     a <- check.ErgmTerm(nw, arglist,
-                        varnames = c("attrname","transform","transformname"),
+                        varnames = c("attr1","attr2"),
                         vartypes = c("character","function","character"),
                         defaultvalues = list(NULL,function(x)x,""),
                         required = c(TRUE,FALSE,FALSE))
-    attrname<-a$attrname
-    f<-a$transform
-    f.name<-a$transformname
-    coef.names <- "clique"
-    cliquecov1 <- f(get.node.attr(nw, "a1"))
-    cliquecov2 <- f(get.node.attr(nw, "a2"))
+    attrarg1 <- a$attr1
+    attrarg2 <- a$attr2
   }else{
     ### Check the network and arguments to make sure they are appropriate.
     a <- check.ErgmTerm(nw, arglist, directed=NULL, bipartite=NULL,
-                        varnames = c("attr"),
+                        varnames = c("attr1","attr2"),
                         vartypes = c(ERGM_VATTR_SPEC),
                         defaultvalues = list(NULL),
                         required = c(TRUE))
-    ### Process the arguments
-    cliquecov1 <- ergm_get_vattr(a$a1, nw, multiple="matrix")
-    cliquecov2 <- ergm_get_vattr(a$a2, nw, multiple="matrix")
-    coef.names <- "clique"
+    attrarg1 <- a$attr1
+    attrarg2 <- a$attr2
   }
-  list(name="clique", coef.names=coef.names, inputs=c(cliquecov1, cliquecov2), dependence=FALSE)
+  if(!is.null(attrarg1)) {
+    nodecov1 <- ergm_get_vattr(attrarg1, nw)
+    attrname1 <- attr(nodecov1, "name")
+    coef.names1 <- paste("clique",attrname1,sep=".")
+  }else{
+    nodecov1 <- ergm_get_vattr("a1", nw)
+    coef.names1 <- paste("clique","a1",sep=".")
+  }
+  if(!is.null(attrarg2)) {
+    nodecov2 <- ergm_get_vattr(attrarg2, nw)
+    attrname2 <- attr(nodecov2, "name")
+    coef.names2 <- paste("clique",attrname2,sep=".")
+  }else{
+    nodecov2 <- ergm_get_vattr("a2", nw)
+    coef.names2 <- paste("clique","a2",sep=".")
+  }
+  ### Process the arguments
+  coef.names <- "clique"
+  list(name="clique", coef.names=coef.names, inputs=c(nodecov1, nodecov2), dependence=FALSE)
 }
                         
 
