@@ -4950,7 +4950,7 @@ InitErgmTerm.nodemain<-InitErgmTerm.nodecov
                         
 ################################################################################
 
-#' @name cliquecov-ergmTerm
+#' @name clique-ergmTerm
 #' @title Main effect of a covariate
 #' @description Main effect of a covariate
 #' @details This term adds a single network statistic for each quantitative attribute or matrix column to the model equaling the sum of
@@ -4960,7 +4960,7 @@ InitErgmTerm.nodemain<-InitErgmTerm.nodecov
 #'   `nodeocov` .
 #'
 #' @usage
-#' # binary: nodecov(attr)
+#' # binary: clique(attr1, attr2)
 #'
 #' @template ergmTerm-attr
 #'
@@ -4984,12 +4984,12 @@ InitErgmTerm.clique<-function (nw, arglist, ..., version=packageVersion("ergm"))
     f<-a$transform
     f.name<-a$transformname
     coef.names <- "cliquecov"
-    cliquecov1 <- f(get.node.attr(nw, "a1", "cliquecov"))
-    cliquecov2 <- f(get.node.attr(nw, "a2", "cliquecov"))
+    cliquecov1 <- f(get.node.attr(nw, "a1"))
+    cliquecov2 <- f(get.node.attr(nw, "a2"))
   }else{
     ### Check the network and arguments to make sure they are appropriate.
     a <- check.ErgmTerm(nw, arglist, directed=NULL, bipartite=NULL,
-                        varnames = c("attr"),
+                        varnames = c("clique"),
                         vartypes = c(ERGM_VATTR_SPEC),
                         defaultvalues = list(NULL),
                         required = c(TRUE))
