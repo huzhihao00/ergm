@@ -4983,7 +4983,7 @@ InitErgmTerm.clique<-function (nw, arglist, ..., version=packageVersion("ergm"))
     attrname<-a$attrname
     f<-a$transform
     f.name<-a$transformname
-    coef.names <- "cliquecov"
+    coef.names <- "clique"
     cliquecov1 <- f(get.node.attr(nw, "a1"))
     cliquecov2 <- f(get.node.attr(nw, "a2"))
   }else{
@@ -4996,7 +4996,7 @@ InitErgmTerm.clique<-function (nw, arglist, ..., version=packageVersion("ergm"))
     ### Process the arguments
     cliquecov1 <- ergm_get_vattr(a$a1, nw, multiple="matrix")
     cliquecov2 <- ergm_get_vattr(a$a2, nw, multiple="matrix")
-    coef.names <- "cliquecov"
+    coef.names <- "clique"
   }
   list(name="clique", coef.names=coef.names, inputs=c(cliquecov1, cliquecov2), dependence=FALSE)
 }
