@@ -4960,7 +4960,7 @@ InitErgmTerm.nodemain<-InitErgmTerm.nodecov
 #'   `nodeocov` .
 #'
 #' @usage
-#' # binary: clique(attr1, attr2)
+#' # binary: clique(attr1=NULL, attr2=NULL)
 #'
 #' @template ergmTerm-attr
 #'
